@@ -4,6 +4,6 @@
  
  Current features:
  - Change cash
- - Unlock/enable/disable tools
+ - Unlock tools
  - Unlock missions
  - Change rank/score
