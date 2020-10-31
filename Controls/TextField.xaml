@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="TeardownSaveEditor.Controls.TextField"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TeardownSaveEditor.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <!--<StackPanel>
+        <TextBlock Text="{Binding Path=Title}"/>
+        
+        <TextBox x:Name="text" TextChanged="TextChanged" LostFocus="textLostFocus" KeyDown="textKeyDown"/>
+    </StackPanel>-->
+
+    <DockPanel Height="20">
+        <TextBlock Text="{Binding Path=Title}" Margin="0,0,5,0" DockPanel.Dock="Left"/>
+        <TextBox x:Name="text" TextChanged="TextChanged" LostFocus="textLostFocus" KeyDown="textKeyDown" />
+
+    </DockPanel>
+</UserControl>
