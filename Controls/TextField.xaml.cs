@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +11,16 @@ namespace TeardownSaveEditor.Controls
     /// </summary>
     public partial class TextField : UserControl
     {
+        public class TextEventArgs : EventArgs
+        {
+            public readonly string text;
+
+            public TextEventArgs(string txt)
+            {
+                text = txt;
+            }
+        }
+
         public string Title
         {
             get { return (string)GetValue(TitleProperty); }
@@ -30,7 +39,7 @@ namespace TeardownSaveEditor.Controls
         public static DependencyProperty NumericProperty = DependencyProperty.Register("NumericOnly", typeof(bool), typeof(TextField));
 
 
-        public event EventHandler<string> OnTextEntered;
+        public event EventHandler<TextEventArgs> OnTextEntered;
 
 
         private string currentNumericText = "0";
@@ -53,26 +62,24 @@ namespace TeardownSaveEditor.Controls
             if (NumericOnly)
                 UpdateTextNumeric(text.Text);
 
-            OnTextEntered?.Invoke(this, text.Text);
+            OnTextEntered?.Invoke(this, new TextEventArgs(text.Text));
         }
 
         private void TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (text.Text.Length > 1)
+            if (NumericOnly && text.Text.Length > 0)
             {
-                if (NumericOnly)
-                    UpdateTextNumeric(text.Text);
-            }
-            else
-            {
-                if (!text.Text.StartsWith("+") && !text.Text.StartsWith("-"))
-                    text.Text = "";
+                if (!text.Text.StartsWith("+") && !text.Text.StartsWith("-") && !char.IsNumber(text.Text[0]))
+                    text.Text = "0";
+                UpdateTextNumeric(text.Text);
             }
         }
 
         private void UpdateTextNumeric(string newTxt)
         {
             if (!NumericOnly) return;
+
+            newTxt = newTxt.Trim();
 
             if (string.IsNullOrWhiteSpace(newTxt))
             {
@@ -88,7 +95,7 @@ namespace TeardownSaveEditor.Controls
                 else if (f < int.MinValue)
                     text.Text = int.MinValue.ToString();
 
-                currentNumericText = text.Text;
+                text.Text = currentNumericText = newTxt;
             }
             else
             {
@@ -102,7 +109,7 @@ namespace TeardownSaveEditor.Controls
             if (NumericOnly)
                 UpdateTextNumeric(text.Text);
 
-            OnTextEntered?.Invoke(this, text.Text);
+            OnTextEntered?.Invoke(this, new TextEventArgs(text.Text));
         }
 
         private void textKeyDown(object sender, KeyEventArgs e)
@@ -112,7 +119,7 @@ namespace TeardownSaveEditor.Controls
                 if (NumericOnly)
                     UpdateTextNumeric(text.Text);
 
-                OnTextEntered?.Invoke(this, text.Text);
+                OnTextEntered?.Invoke(this, new TextEventArgs(text.Text));
             }
         }
     }

@@ -6,22 +6,43 @@
         xmlns:local="clr-namespace:TeardownSaveEditor"
         xmlns:c="clr-namespace:TeardownSaveEditor.Controls"
         mc:Ignorable="d"
-        Title="TeardownSaveEditor" Height="500" Width="500" MinWidth="500" MinHeight="500" Closing="Stop" Icon="Assets/icon.ico">
-    <Grid>
+        Title="TeardownSaveEditor" Height="500" Width="500" MinWidth="500" MinHeight="800" Closing="Stop" Icon="Assets/icon.ico">
+
+    <Window.Resources>
+        <Style TargetType="ListView" x:Key="noScrollList">
+
+            <Setter Property="ListView.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border BorderBrush="#FFABADB3" BorderThickness="0.8">
+                            <ItemsPresenter></ItemsPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="5">
             <!-- Header -->
             <TextBlock FontSize="30" FontWeight="Bold" HorizontalAlignment="Center">Save Editor for Teardown</TextBlock>
             <TextBlock HorizontalAlignment="Center">by Criz Games</TextBlock>
-            
+
             <!-- Misc -->
             <TextBlock FontWeight="Bold" Margin="0,10,0,0">Misc</TextBlock>
             <DockPanel>
                 <Button DockPanel.Dock="Right" Width="100" Margin="5,0,0,0" Click="MaxCashButton_Click">Max Cash</Button>
                 <c:TextField x:Name="cashText" Title="Cash" NumericOnly="True" OnTextEntered="CashText_OnTextEntered"/>
             </DockPanel>
+
             <!-- Tools -->
             <TextBlock FontWeight="Bold" Margin="0,10,0,0">Tools</TextBlock>
-            <ListView x:Name="toolsList">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="toolsAllCheckBox" Margin="0,0,5,0" Unchecked="ToolsAllUnchecked" Checked="ToolsAllChecked"/>
+                <TextBlock>All</TextBlock>
+            </StackPanel>
+            <ListView x:Name="toolsList" Style="{StaticResource noScrollList}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -31,6 +52,49 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <!-- Missions -->
+            <TextBlock FontWeight="Bold" Margin="0,10,0,0">Missions</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="missionsAllCheckBox" Margin="0,0,5,0" Unchecked="MissionsAllUnchecked" Checked="MissionsAllChecked"/>
+                <TextBlock>All</TextBlock>
+            </StackPanel>
+            <ListView x:Name="missionsList" Style="{StaticResource noScrollList}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding enabled, Mode=TwoWay}" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding title}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!-- Ranks -->
+            <TextBlock FontWeight="Bold" Margin="0,10,0,0">Ranks</TextBlock>
+            <Border BorderBrush="#FFABADB3" BorderThickness="0.8">
+                <StackPanel>
+                    <ListView x:Name="ranksList">
+                        <ListView.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter/>
+                            </ControlTemplate>
+                        </ListView.Template>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton GroupName="rank" IsChecked="{Binding enabled, Mode=TwoWay}" Checked="rank_Checked" Unchecked="rank_Unchecked" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{Binding title}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <c:TextField x:Name="customScoreText" Title="Score" NumericOnly="True" Margin="5,0" OnTextEntered="customScoreText_OnTextEntered"/>
+                </StackPanel>
+            </Border>
+
+
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Window>
