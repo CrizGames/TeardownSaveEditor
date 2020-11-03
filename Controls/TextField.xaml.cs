@@ -69,9 +69,17 @@ namespace TeardownSaveEditor.Controls
         {
             if (NumericOnly && text.Text.Length > 0)
             {
-                if (!text.Text.StartsWith("+") && !text.Text.StartsWith("-") && !char.IsNumber(text.Text[0]))
+                string t = text.Text;
+                if (t.Length > 11)
+                {
+                    text.Text = t = t.Substring(0, 11);
+                    text.CaretIndex = text.Text.Length;
+                }
+
+                if (!t.StartsWith("+") && !t.StartsWith("-") && !char.IsNumber(text.Text[0]))
                     text.Text = "0";
-                UpdateTextNumeric(text.Text);
+
+                UpdateTextNumeric(t);
             }
         }
 
@@ -91,9 +99,9 @@ namespace TeardownSaveEditor.Controls
             if (float.TryParse(newTxt, out float f) && !newTxt.Contains(".") && !newTxt.Contains(","))
             {
                 if (f > int.MaxValue)
-                    text.Text = int.MaxValue.ToString();
+                    newTxt = int.MaxValue.ToString();
                 else if (f < int.MinValue)
-                    text.Text = int.MinValue.ToString();
+                    newTxt = int.MinValue.ToString();
 
                 text.Text = currentNumericText = newTxt;
             }
